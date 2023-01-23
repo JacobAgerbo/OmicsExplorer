@@ -1,0 +1,61 @@
+########################################################################
+# This is set up information for the Amplicon Metagenomics Workflow,
+# implemented in Snakemake. Set the parameters below, save the file and
+# run snakemake.
+# Note that lines beginning with # are comments, i.e. they are ignored.
+#
+# Author: Christine Lowe and Oksana Korol
+# Date: 2017.04.18
+#########################################################################
+
+# Name (path) of the directory where snakemake will be executed; i.e. all other
+# directories and files in this workflow will be relative to this directory, i.e.
+# output files/directories of the workflow will be contained in this directory.
+# You can change this parameter when initiating workflow execution like this:
+### snakemake --config workdir="/path/to/some_other_directory"
+workdir: "data"
+
+# Directory where you unput files (raw amplicon data files with fastq or fastq.gz
+# extension)
+initial_input_dir: "input"
+
+# Path to reference fasta and taxonomy files
+reference_fasta: "unite.fasta"
+reference_taxonomy: "unite.txt"
+
+# Input file extension. Input file types that can be used with this workflow are
+# .fastq or .fastq.gz
+# Specify which of the file extension are you using:
+input_file_extension: ".fastq.gz"
+
+# Part of the input file name that starts with forward read identifier and ends
+# at the end of the file name. Example: for files:
+##   ENV0001_S1_L001_R1_001.fastq.gz
+##   ENV0001_S1_L001_R2_001.fastq.gz
+##   ENV0002_S4_L001_R1_001.fastq.gz
+##   ENV0002_S4_L001_R2_001.fastq.gz
+# the postfix will be R1_001.fastq.gz
+input_file_forward_postfix: "_R1_001.fastq.gz"
+input_file_reverse_postfix: "_R2_001.fastq.gz"
+
+# Number of threads to be used for execution of every tool in this workflow
+threads: 4
+
+# Trimmomatic parameters
+trimmomatic:
+    path: "/home/bin/Trimmomatic-0.36/trimmomatic-0.36.jar"
+    HEADCROP: "15"
+    SLIDINGWINDOW: "4:20"
+    MINLEN: "36"
+    LEADING: "0"
+    TRAILING: "0"
+    CROP: "1000"
+    AVGQUAL: "0"
+    ILLUMINACLIP: "null.fa:0:0:0"
+
+
+pick_otus:
+    s: "0.97"
+
+assign_taxonomy:
+    c: "0.70"
