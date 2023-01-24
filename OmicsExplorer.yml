@@ -3,6 +3,7 @@ channels:
 - bioconda
 - conda-forge
 dependencies:
+- python=3.6
 - trimmomatic
 - fastq-pair
 - seqkit
@@ -11,6 +12,7 @@ dependencies:
 - bowtie2 tbb=2019.8
 - bwa
 - samtools=1.9
+- metawrap
 - "sqlite>=3.31.1"
 - prodigal
 - mcl
@@ -51,3 +53,8 @@ dependencies:
 - bioconductor-sva
 - r-factoextra
 - r-ape
+- r-stringi
+- r-optparse
+- bioconductor-qvalue
+- fasttree
+- vmatch

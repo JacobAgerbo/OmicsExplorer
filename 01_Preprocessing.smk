@@ -11,7 +11,7 @@ def message(mes):
 ## The list of samples to be processed ##
 SAMPLES, = glob_wildcards("${RawDataDir}/{sample}_1.fq.gz")
 NB_SAMPLES = len(SAMPLES)
-THREADS = 8
+THREADS = ${SLURM_CPUS_PER_TASK}
 
 ###
 rule qc_filtering:
@@ -66,7 +66,7 @@ rule host_removal:
 	THREADS: 8
 	shell:
 		"""
-		bwa mem -M -t {THREADS} {params.refgnm} {input.read1} {input.read2} | samtools sort --threads {threads} -o {output.bam_all}
+		bwa mem -M -t {THREADS} {params.refgnm} {input.forward} {input.reverse} | samtools sort --threads {threads} -o {output.bam_all}
 		samtools view -b -F12 -@ {THREADS} {output.bam_all} > {output.host}
 		samtools view -b -f12 -@ {THREADS} {output.bam_all} | samtools fastq --threads {THREADS} -N -1 {output.forward_noHost} -2 {output.reverse_noHost}
 		"""

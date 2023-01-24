@@ -5,44 +5,80 @@
 #####################################################################
 
 ### Set PBS options ###
-SBATCH_PARAMS=('--nodes=1' '--time=2:00:00:00' '--mem=10G')
-JobName="01_Snakemake" ## as short as possible < 8 letters
+SBATCH_PARAMS=('--nodes=1' '--time=2:00:00:00' '--mem=256G')
+JobName="02_Snakemake" ## as short as possible < 8 letters
 EmailNotf="-m  n" ## replace your email address here
-Adapter1="AAGTCGGAGGCCAAGCGGTCTTAGGAAGACAA" # forward adapter for trimmomatic
-Adapter2="AAGTCGGATCGTAGCCATGTCGTTC" # reverse adapter for trimmomatic
-RefG="/projects/mjolnir1/people/bfg522/02_FlyProject_Tom/REF/GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna" # Reference for host-removal
+
 ### Set snakemake options ###
-NumJobsNode=4
 WorkDir=`pwd -P`
-SnakeMakeFile=`echo ${WorkDir}/01_Preprocessing.smk`
-ConfigFile=`echo ${WorkDir}/01_config.yaml`
+SnakeMakeFile=`echo ${WorkDir}/02_Assembly.smk`
+ConfigFile=`echo ${WorkDir}/02_config.yaml`
 RawDataDir=`echo ${WorkDir}/00_RawData`
-DesDir=`echo ${WorkDir}/02_HostRmval/00_QC/`
-if [ ! -f ${SnakeMakeFile} ]; then
-	echo "OmicsExplorer preprocessing snakemake file is found in current working directory!"
-	echo "Go to the correct working directory with ${SnakeMakeFile}"
-	echo "No jobs where submitted to PBS queue."
-	exit 0
+DesDir=`echo ${WorkDir}/03_Assembly`
+
+Assembler="megahit" #choose between "megahit" and "spades"
+Assembly_type="single" # choose between "single" or "coassembly"
+MINLENGTH=2000 # minimum length for contigs
+
+if [ ! -f ${SnakeMakeFile} ]
+	then
+		echo "OmicsExplorer preprocessing snakemake file is found in current working directory!"
+		echo "Go to the correct working directory with ${SnakeMakeFile}"
+		echo "No jobs where submitted to PBS queue."
+		exit 0
 fi
-if [ ! -d ${RawDataDir} ]; then
-        echo "00_RawData directory is not found in current working directory!"
-        echo "No jobs where submitted to PBS queue."
-        exit 0
+
+no_RAW=`ls ${WorkDir}/00_RawData/*_1.fq.gz | wc -l`
+no_Clean=`ls ${WorkDir}/02_HostRmval/*_noHost_1.fq.gz | wc -l`
+
+if [ $no_RAW -ne $no_Clean ]
+	then
+    echo "OmicsExplorer could not find same number of"
+		echo "samples between raw data repo and filtered repo"
+    echo "Have you runned '01_Preprocessing.smk'?"
+		exit 0
 fi
+
+if [ ${Assembly_type} != "single" ] && [ ${Assembly_type} != "coassembly" ]
+	then
+    echo "OmicsExplorer could not find a specified assembly type"
+		echo "Please specify assembly type, either 'single' and 'coassembly'"
+    echo "No jobs where submitted to PBS queue."
+		exit 0
+fi
+
+if [ ${Assembler} != "megahit" ] && [ ${Assembler} != "spades" ]
+	then
+    echo "OmicsExplorer could not find a specified assembler"
+		echo "Please specify assembler, either 'megahit' and 'spades'"
+    echo "No jobs where submitted to PBS queue."
+		exit 0
+fi
+
+if [ ${Assembly_type} = "coassembly" && [ ${Assembler} = "spades" ]
+	then
+    echo "OmicsExplorer will not make co-assemblies with SPAdes"
+		echo "This would deplete all memory resources on the cluster"
+		echo "Therefore, OmicsExplorer choose megahit for co-assmebly"
+  	Assembler="megahit"
+fi
+
+
+if [ ${Assembly_type} = "single" ]
+then
+ NumJobsNode=8
+elif [ ${Assembly_type} = "coassembly" ]
+then
+ NumJobsNode=1
+else
+ NumJobsNode=8
+fi
+
 
 ### Set parameters for the pipeline
-
-if [ ! -f ${RefG} ]; then
-        echo "Reference Genome is not found!"
-        echo "No jobs where submitted to PBS queue."
-        exit 0
-fi
-echo "adapter1: $Adapter1" > $ConfigFile
-echo "adapter2: $Adapter2" >> $ConfigFile
-echo "maxns: $MaxNs" >> $ConfigFile
-echo "minquality: $MinQuality" >> $ConfigFile
-echo "minlength: $MinLength" >> $ConfigFile
-echo "refgenomehost: $RefG" >> $ConfigFile
+echo "Assembler: $Assembler" >> $ConfigFile
+echo "Assembly_Type: $Assembly_type" >> $ConfigFile
+echo "MINLENGTH: $MINLENGTH" >> $ConfigFile
 
 ###
 NumSamples=`ls -1 -d ${RawDataDir}/*_1.fq.gz | grep -vc "^\s*$"`
