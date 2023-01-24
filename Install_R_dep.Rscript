@@ -2,14 +2,23 @@
 dependencies <- c("devtools","boral","ggboral", "pbkrtest", "ggiraph", "hilldiv")
 installed_packages <- dependencies %in% rownames(installed.packages())
 if (any(installed_packages == FALSE)) {
-  install.packages(dependencies[!installed_packages])}
+  install.packages(dependencies[!installed_packages]),repos = "http://cran.us.r-project.org"}
 #BiocManager
 installed_packages <- dependencies %in% rownames(installed.packages())
 if (any(installed_packages == FALSE)) {
 BiocManager::install(dependencies[!installed_packages])}
 #Github
 installed_packages <- dependencies %in% rownames(installed.packages())
-if (installed_packages[2] == FALSE) {
+if (installed_packages[3] == FALSE) {
   remotes::install_github("mbedward/ggboral")}
 # install QuickFixR
 devtools::install_github("JacobAgerbo/QuickFixR")
+
+
+
+# Install packages not yet installed
+installed_packages <- packages %in% rownames(installed.packages())
+if (any(installed_packages == FALSE)) {  install.packages(packages[!installed_packages]) }
+
+# Packages loading
+invisible(lapply(packages, library, character.only = TRUE))
