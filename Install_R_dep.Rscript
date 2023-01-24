@@ -11,6 +11,8 @@ BiocManager::install(dependencies[!installed_packages])}
 installed_packages <- dependencies %in% rownames(installed.packages())
 if (installed_packages[3] == FALSE) {
   remotes::install_github("mbedward/ggboral")}
+if (installed_packages[6] == FALSE) {
+  remotes::install_github("anttonalberdi/hilldiv")}
 # install QuickFixR
 devtools::install_github("JacobAgerbo/QuickFixR")
 
