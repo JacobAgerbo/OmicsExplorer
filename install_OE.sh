@@ -3,24 +3,22 @@
 # Usage: just run "bash install_OE.sh"
 WorkDir=`pwd -P`
 pip3_path=`which pip3`
-bin="${WorkDir}/.bin/"
-if [ ! -d ${bin} ]
-  then
-    mkdir ${WorkDir}/.bin/
-fi
+bin="${WorkDir}/.OE_bin/"
+mkdir ${bin}
 
 if [ ! -d ${pip3_path} ]
 then
  echo "conda is active, let install all dependencies"
- curl -L https://github.com/merenlab/anvio/releases/download/v7.1/anvio-7.1.tar.gz --output $bin/anvio-7.1.tar.gz
- curl -L https://raw.githubusercontent.com/JacobAgerbo/OmicsExplorer/main/OmicsExplorer.yml --output $bin/OmicsExplorer.yml
- conda env create -f $bin/OmixExplorer.yml
+ curl -L https://github.com/merenlab/anvio/releases/download/v7.1/anvio-7.1.tar.gz --output ${bin}/anvio-7.1.tar.gz
+ curl -L https://raw.githubusercontent.com/JacobAgerbo/OmicsExplorer/main/OmicsExplorer.yml --output ${bin}/OmicsExplorer.yml
+ conda env create -f ${bin}/OmicsExplorer.yml
  conda activate OmicsExplorer
- pip install anvio-7.1.tar.gz
+ pip install ${bin}/anvio-7.1.tar.gz
   if [$CONDA_PREFIX = "OmicsExplorer"]
   then
     echo "Something went wrong :'("
     echo "OmicsExplorer was succesfully installed. Yay!"
+    rm -r $bin
   else
     echo "Something went wrong :'("
   fi
