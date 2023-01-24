@@ -9,7 +9,7 @@ dependencies:
 - seqkit
 - megahit
 - spades
-- bowtie2 tbb=2019.8
+- bowtie2
 - bwa
 - samtools=1.9
 - metawrap
