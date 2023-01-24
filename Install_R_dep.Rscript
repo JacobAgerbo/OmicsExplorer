@@ -1,0 +1,15 @@
+#!/usr/bin/env Rscript
+dependencies <- c("devtools","boral","ggboral", "pbkrtest", "ggiraph", "hilldiv")
+installed_packages <- dependencies %in% rownames(installed.packages())
+if (any(installed_packages == FALSE)) {
+  install.packages(dependencies[!installed_packages])}
+#BiocManager
+installed_packages <- dependencies %in% rownames(installed.packages())
+if (any(installed_packages == FALSE)) {
+BiocManager::install(dependencies[!installed_packages])}
+#Github
+installed_packages <- dependencies %in% rownames(installed.packages())
+if (installed_packages[2] == FALSE) {
+  remotes::install_github("mbedward/ggboral")}
+# install QuickFixR
+devtools::install_github("JacobAgerbo/QuickFixR")
