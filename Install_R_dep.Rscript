@@ -15,12 +15,3 @@ if (installed_packages[6] == FALSE) {
   remotes::install_github("anttonalberdi/hilldiv")}
 # install QuickFixR
 devtools::install_github("JacobAgerbo/QuickFixR")
-
-
-
-# Install packages not yet installed
-installed_packages <- packages %in% rownames(installed.packages())
-if (any(installed_packages == FALSE)) {  install.packages(packages[!installed_packages]) }
-
-# Packages loading
-invisible(lapply(packages, library, character.only = TRUE))
