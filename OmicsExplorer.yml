@@ -12,6 +12,7 @@ dependencies:
 - bowtie2
 - bwa
 - samtools=1.9
+- qualimap
 - metawrap
 - "sqlite>=3.31.1"
 - prodigal
