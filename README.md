@@ -3,6 +3,7 @@
 OmicsExplo is a bioinformatics workflow for genomics data generation and analysis an this GitHub contains a workflow for generating and exploring usefull data derived from 'omics'.
 
 The aim of this workflow is to make knowledge out of data and the end point of this workflow should be to have a usable workflow for multiple kinds of omics layers, which a normally used to understand host-microbe interactions, as described in Limborg et al., 2017.
+
 ![alt text](misc/Hologenomics.jpg)
 
 But please behold! This workflow is still under construction.
