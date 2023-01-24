@@ -3,7 +3,7 @@
 # Usage: just run "bash install_OE.sh"
 WorkDir=`pwd -P`
 pip3_path=`which pip3`
-bin="${WorkDir}/.OE_bin/"
+bin="${WorkDir}/.OE_bin"
 mkdir ${bin}
 if [ ! -d ${pip3_path} ]
 then
