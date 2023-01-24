@@ -14,8 +14,11 @@ But please behold! This workflow is still under construction.
 The OmicsExplorer workflow is based on a snakemake. This snakemake is based on a repository, which should be cloned from here.
 The first input of the workflow, should start from a repository, called **00_RawData**. **00_RawData** should contain raw fq.gz per sample. Importantly, all samples should have the postfix **fq.gz** and _not_ **fastq.gz**, since the snakemake only recgonises **fq.gz**.
 
+#### OmicsExplorer genome-resolved metagenomics workflow relies on anvi'o
+The metagenomic part of OmicsExplorer is based a lot on the amazing platform **anvi'o**. All credits should be given to the anvi'o [**team**](https://anvio.org/people/)! 
+
 ### Using OmicsExplorer and sbatch on a cluster
-Since the OmicsExplorer is relying on some heavy computing, I have chosen to setup scripts to launch the snakemake in the sbatch submission system. These script has the prefix **launch**. The script will generate the necessary config.yaml file for the snakemake, based on information from the launch script, which should be defined before running the workflow. 
+Since the OmicsExplorer is relying on some heavy computing, I have chosen to setup scripts to launch the snakemake in the sbatch submission system. These script has the prefix **launch**. The script will generate the necessary config.yaml file for the snakemake, based on information from the launch script, which should be defined before running the workflow.
 
 ## Installation of conda environment and dependencies for OmicsExplorer
 
