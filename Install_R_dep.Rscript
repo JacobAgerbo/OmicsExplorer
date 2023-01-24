@@ -2,7 +2,7 @@
 dependencies <- c("devtools","boral","ggboral", "pbkrtest", "ggiraph", "hilldiv")
 installed_packages <- dependencies %in% rownames(installed.packages())
 if (any(installed_packages == FALSE)) {
-  install.packages(dependencies[!installed_packages]),repos = "http://cran.us.r-project.org"}
+  install.packages(dependencies[!installed_packages],repos = "http://cran.us.r-project.org")}
 #BiocManager
 installed_packages <- dependencies %in% rownames(installed.packages())
 if (any(installed_packages == FALSE)) {
