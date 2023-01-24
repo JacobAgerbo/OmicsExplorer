@@ -13,7 +13,7 @@ if [ ! -d ${pip3_path} ]
 then
  echo "conda is active, let install all dependencies"
  curl -L https://github.com/merenlab/anvio/releases/download/v7.1/anvio-7.1.tar.gz --output $bin/anvio-7.1.tar.gz
- curl -L https://raw.githubusercontent.com/JacobAgerbo/OmicsExplorer/main/OmicsExplorer.yml?token=GHSAT0AAAAAAB5SWOCQ5XDO2CACR3J5U3MAY6PZ7JQ --output $bin/OmicsExplorer.yml
+ curl -L https://raw.githubusercontent.com/JacobAgerbo/OmicsExplorer/main/OmicsExplorer.yml --output $bin/OmicsExplorer.yml
  conda env create -f $bin/OmixExplorer.yml
  conda activate OmicsExplorer
  pip install anvio-7.1.tar.gz
@@ -22,7 +22,7 @@ then
     echo "Something went wrong :'("
     echo "OmicsExplorer was succesfully installed. Yay!"
   else
-    echo "Something went wrong :'(" 
+    echo "Something went wrong :'("
   fi
 else
  echo "conda is not activate, please install miniconda or anaconda"
