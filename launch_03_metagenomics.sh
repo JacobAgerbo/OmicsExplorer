@@ -5,44 +5,43 @@
 #####################################################################
 
 ### Set PBS options ###
-SBATCH_PARAMS=('--nodes=1' '--time=2:00:00:00' '--mem=10G')
-JobName="01_Snakemake" ## as short as possible < 8 letters
+SBATCH_PARAMS=('--nodes=1' '--time=2:00:00:00' '--mem=256G')
+JobName="03_Snakemake" ## as short as possible < 8 letters
 EmailNotf="-m  n" ## replace your email address here
-Adapter1="AAGTCGGAGGCCAAGCGGTCTTAGGAAGACAA" # forward adapter for trimmomatic
-Adapter2="AAGTCGGATCGTAGCCATGTCGTTC" # reverse adapter for trimmomatic
-RefG="/projects/mjolnir1/people/bfg522/02_FlyProject_Tom/REF/GCF_000001215.4_Release_6_plus_ISO1_MT_genomic.fna" # Reference for host-removal
+
 ### Set snakemake options ###
-NumJobsNode=4
 WorkDir=`pwd -P`
-SnakeMakeFile=`echo ${WorkDir}/01_Preprocessing.smk`
-ConfigFile=`echo ${WorkDir}/01_config.yaml`
+SnakeMakeFile=`echo ${WorkDir}/Workflows/03_metagenomics.smk`
+ConfigFile=`echo ${WorkDir}/Workflows/03_config.yaml`
 RawDataDir=`echo ${WorkDir}/00_RawData`
-DesDir=`echo ${WorkDir}/02_HostRmval/00_QC/`
-if [ ! -f ${SnakeMakeFile} ]; then
-	echo "OmicsExplorer preprocessing snakemake file is found in current working directory!"
-	echo "Go to the correct working directory with ${SnakeMakeFile}"
-	echo "No jobs where submitted to PBS queue."
-	exit 0
+DesDir=`echo ${WorkDir}/04_Metagenomics`
+
+Assembly_type="single" # choose between "single" or "coassembly"
+MINLENGTH=2000 # minimum length for contigs
+
+if [ ! -f ${SnakeMakeFile} ]
+	then
+		echo "OmicsExplorer preprocessing snakemake file is found in current working directory!"
+		echo "Go to the correct working directory with ${SnakeMakeFile}"
+		echo "No jobs where submitted to PBS queue."
+		exit 0
 fi
-if [ ! -d ${RawDataDir} ]; then
-        echo "00_RawData directory is not found in current working directory!"
-        echo "No jobs where submitted to PBS queue."
-        exit 0
+
+if [ ${Assembly_type} = "single" ]
+then
+ NumJobsNode=8
+elif [ ${Assembly_type} = "coassembly" ]
+then
+ NumJobsNode=1
+else
+ NumJobsNode=8
 fi
+
 
 ### Set parameters for the pipeline
-
-if [ ! -f ${RefG} ]; then
-        echo "Reference Genome is not found!"
-        echo "No jobs where submitted to PBS queue."
-        exit 0
-fi
-echo "adapter1: $Adapter1" > $ConfigFile
-echo "adapter2: $Adapter2" >> $ConfigFile
-echo "maxns: $MaxNs" >> $ConfigFile
-echo "minquality: $MinQuality" >> $ConfigFile
-echo "minlength: $MinLength" >> $ConfigFile
-echo "refgenomehost: $RefG" >> $ConfigFile
+echo "Assembler: $Assembler" >> $ConfigFile
+echo "Assembly_Type: $Assembly_type" >> $ConfigFile
+echo "MINLENGTH: $MINLENGTH" >> $ConfigFile
 
 ###
 NumSamples=`ls -1 -d ${RawDataDir}/*_1.fq.gz | grep -vc "^\s*$"`
