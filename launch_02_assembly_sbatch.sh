@@ -11,8 +11,8 @@ EmailNotf="-m  n" ## replace your email address here
 
 ### Set snakemake options ###
 WorkDir=`pwd -P`
-SnakeMakeFile=`echo ${WorkDir}/02_Assembly.smk`
-ConfigFile=`echo ${WorkDir}/02_config.yaml`
+SnakeMakeFile=`echo ${WorkDir}/Workflows/02_Assembly.smk`
+ConfigFile=`echo ${WorkDir}/Workflows/02_config.yaml`
 RawDataDir=`echo ${WorkDir}/00_RawData`
 DesDir=`echo ${WorkDir}/03_Assembly`
 
